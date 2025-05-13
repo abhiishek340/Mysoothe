@@ -24,16 +24,19 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFromBaseline
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -81,18 +84,20 @@ fun SearchBar(
 // Step: Align your body - Alignment
 @Composable
 fun AlignYourBodyElement(
+    @DrawableRes drawable: Int,
+    @StringRes text: Int,
     modifier: Modifier = Modifier
 ) {
     // Implement composable here
     Column (modifier, horizontalAlignment = Alignment.CenterHorizontally){
         Image(
-            painterResource(id= R.drawable.ab1_inversions),
+            painterResource(id= drawable),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(88.dp).clip(CircleShape)
         )
         Text(
-            stringResource(id =R.string.ab1_inversions),
+            stringResource(id = text),
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp)
         )
@@ -101,9 +106,31 @@ fun AlignYourBodyElement(
 // Step: Favorite collection card - Material Surface
 @Composable
 fun FavoriteCollectionCard(
+    @DrawableRes drawable: Int,
+    @StringRes text:Int,
     modifier: Modifier = Modifier
 ) {
     // Implement composable here
+    Surface (
+        shape = MaterialTheme.shapes.small,
+        modifier = modifier
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.width(192.dp)){
+            Image(
+                painterResource(id = drawable),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(56.dp)
+            )
+            Text(
+                stringResource(id = text),
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        }
+    }
 }
 
 // Step: Align your body row - Arrangements
@@ -200,6 +227,8 @@ fun SearchBarPreview() {
 fun AlignYourBodyElementPreview() {
     MySootheTheme {
         AlignYourBodyElement(
+            drawable = R.drawable.ab1_inversions,
+            text = R.string.ab1_inversions,
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -210,6 +239,8 @@ fun AlignYourBodyElementPreview() {
 fun FavoriteCollectionCardPreview() {
     MySootheTheme {
         FavoriteCollectionCard(
+            drawable = R.drawable.fc2_nature_meditations,
+            text = R.string.fc2_nature_meditations,
             modifier = Modifier.padding(8.dp)
         )
     }
