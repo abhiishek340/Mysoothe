@@ -22,13 +22,31 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.paddingFromBaseline
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.codelab.basiclayouts.ui.theme.MySootheTheme
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,8 +60,22 @@ class MainActivity : ComponentActivity() {
 fun SearchBar(
     modifier: Modifier = Modifier
 ) {
-    TextField(value = "", onValueChange = {} )
     // Implement composable here
+    TextField(value = "",
+        onValueChange = {},
+        leadingIcon = {
+                        Icon(Icons.Default.Search, contentDescription = null )
+        },
+        placeholder = {
+            Text(stringResource(id = R.string.placeholder_search))
+        },
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = MaterialTheme.colorScheme.surface
+        ),
+        modifier = modifier
+            .heightIn(min =56.dp)
+            .fillMaxWidth()
+    )
 }
 
 // Step: Align your body - Alignment
@@ -52,8 +84,20 @@ fun AlignYourBodyElement(
     modifier: Modifier = Modifier
 ) {
     // Implement composable here
+    Column (modifier, horizontalAlignment = Alignment.CenterHorizontally){
+        Image(
+            painterResource(id= R.drawable.ab1_inversions),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.size(88.dp).clip(CircleShape)
+        )
+        Text(
+            stringResource(id =R.string.ab1_inversions),
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.paddingFromBaseline(top = 24.dp, bottom = 8.dp)
+        )
+    }
 }
-
 // Step: Favorite collection card - Material Surface
 @Composable
 fun FavoriteCollectionCard(
