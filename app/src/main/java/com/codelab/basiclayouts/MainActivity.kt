@@ -45,10 +45,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -233,13 +237,23 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
     // Implement composable here
-    BottomNavigation(modifier){
-        BottomNavigationItem(
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = modifier){
+        NavigationBarItem(
             selected = true,
             onClick = {},
             icon = { Icon(Icons.Default.Spa, contentDescription = null) },
             label ={
                 Text(stringResource(id = R.string.bottom_navigation_home))
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {},
+            icon = { Icon(Icons.Default.AccountCircle, contentDescription = null) },
+            label ={
+                Text(stringResource(id = R.string.bottom_navigation_profile))
             }
         )
     }
@@ -248,9 +262,14 @@ private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
 // Step: MySoothe App - Scaffold
 @Composable
 fun MySootheAppPortrait() {
-    // Implement composable here
+    MySootheTheme {
+        Scaffold(
+            bottomBar = { SootheBottomNavigation() }
+        ) { padding ->
+            HomeScreen(Modifier.padding(padding))
+        }
+    }
 }
-
 // Step: Bottom navigation - Material
 @Composable
 private fun SootheNavigationRail(modifier: Modifier = Modifier) {
@@ -259,14 +278,26 @@ private fun SootheNavigationRail(modifier: Modifier = Modifier) {
 
 // Step: Landscape Mode
 @Composable
-fun MySootheAppLandscape(){
-    // Implement composable here
+fun MySootheAppLandscape() {
+    MySootheTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Row {
+                SootheNavigationRail()
+                HomeScreen()
+            }
+        }
+    }
 }
-
 // Step: MySoothe App
 @Composable
 fun MySootheApp() {
     // Implement composable here
+    Scaffold (
+        bottomBar = { SootheBottomNavigation() }
+    ) { padding ->
+        HomeScreen()
+
+    }
 }
 
 private val alignYourBodyData = listOf(
