@@ -16,6 +16,7 @@
 
 package com.codelab.basiclayouts
 
+import android.icu.text.CaseMap.Title
 import android.os.Bundle
 import android.renderscript.Sampler.Value
 import androidx.activity.ComponentActivity
@@ -27,6 +28,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -39,9 +41,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -58,6 +63,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,14 +194,38 @@ fun FavoriteCollectionsGrid(
 // Step: Home section - Slot APIs
 @Composable
 fun HomeSection(
-    modifier: Modifier = Modifier
+    @StringRes title: Int,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
 ) {
     // Implement composable here
+    Column (modifier){
+        Text(stringResource(id=title).uppercase(Locale.getDefault()),
+        style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.paddingFromBaseline(
+                top = 40.dp, bottom = 8.dp) //vertically
+                .padding(horizontal = 16.dp)
+            )
+        content()
+    }
 }
 
 // Step: Home screen - Scrolling
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    Column (modifier.verticalScroll(rememberScrollState())){
+        Spacer(Modifier.height(16.dp))
+        SearchBar(Modifier.padding(horizontal = 16.dp))
+        HomeSection(title = R.string.align_your_body){
+            AlignYourBodyRow()
+        }
+            HomeSection(title = R.string.favorite_collections){
+                FavoriteCollectionsGrid()
+
+        }
+        Spacer(Modifier.height(16.dp))
+
+    }
     // Implement composable here
 }
 
@@ -201,6 +233,16 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun SootheBottomNavigation(modifier: Modifier = Modifier) {
     // Implement composable here
+    BottomNavigation(modifier){
+        BottomNavigationItem(
+            selected = true,
+            onClick = {},
+            icon = { Icon(Icons.Default.Spa, contentDescription = null) },
+            label ={
+                Text(stringResource(id = R.string.bottom_navigation_home))
+            }
+        )
+    }
 }
 
 // Step: MySoothe App - Scaffold
@@ -295,10 +337,15 @@ fun AlignYourBodyRowPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun HomeSectionPreview() {
-    MySootheTheme { HomeSection() }
+    MySootheTheme {
+        HomeSection(title = R.string.align_your_body) {
+            AlignYourBodyRow()
+        }
+        }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+
+@Preview(showBackground = true, backgroundColor = 0xFFF5F0EE, heightDp = 180) // scroll vertically
 @Composable
 fun ScreenContentPreview() {
     MySootheTheme { HomeScreen() }
